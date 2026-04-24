@@ -18,7 +18,7 @@ def calculate_gf(disp,load):
     print("Max at {}mm".format(disp[i]*1e3))
     return integrate.trapz(load[i:],disp[i:])
 
-top_dir = "./data/"
+top_dir = "/nobackup/rmvn14/thesis/biaxial/data/"
 regex = re.compile(r'^output.*')
 folders = list(filter(regex.search,os.listdir(top_dir)))
 plt.figure(1)

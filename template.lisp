@@ -55,30 +55,48 @@
       :min-damage-inc 0.1d0
       :substeps (round (* refine 50))
       :sub-conv-steps 50
-      :criteria 1d-6
+      :criteria 1d-3
       :true-stagger nil
       :save-vtk-dr nil
       :save-vtk-loadstep t
       :dt-scale 1d0))))
 
 (defparameter *angle* (let ((var (uiop:getenv "ANGLE"))) (if var (parse-float:parse-float var) 1d0)))
+(defparameter *model* (let ((var (uiop:getenv "MODEL"))) (if var var "MC")))
+(defparameter *tension* (let ((var (uiop:getenv "TENSION"))) (if var (string= var "TRUE") nil)))
+(defparameter *model-hash* (serapeum:dict "MC" :MC "DP" :DP "RANKINE" :RANKINE "SE" :SE))
+
+;(defparameter *model-hash* (serapeum:dict "MC" :MC "DP" :DP "RANKINE" :RANKINE "SE" :SE))
+
 (let ((refine *refine*)
       (angle *angle*)
-      (model :MC))
+      (model (gethash *model* *model-hash*)))
   (setup :mps 3
          :refine refine
          :enable-fbar t
+         :kt (- 1d0 1d-6)
          :angle angle
-         :angle-r 1d0
+         :angle-r 0d0
          :gf 40d0
          :model model
          :epsilon-scale 1d2
+         ;:local-length (/ 0.01d0 refine)
          )
-  (let ((output-dir (format nil "./data/output-~A-~F-~D/" model angle refine)))
+  (let ((particle 'cl-mpm/particle::particle-fpd-isotropic))
+    (cl-mpm::iterate-over-mps
+      (cl-mpm:sim-mps *sim*)
+      (lambda (mp)
+        (change-class mp particle))))
+  ;(setf (cl-mpm/damage::sim-enable-length-localisation *sim*) t)
+  ;(setf (cl-mpm/damage::sim-enable-ekl *sim*) t)
+  (let ((output-dir (format nil "/nobackup/rmvn14/thesis/biaxial/data/output-~A-~A-~F-~D/"
+                            (if *tension* "T" "C")
+                            model angle refine)))
     (format t "Testing ~A~%" output-dir)
     (time
      (run :output-dir output-dir
           :lstps 50
           :total-disp -5d-3
           :enable-damage t
+          :tensile *tension*
           :refine refine))))

@@ -22,7 +22,8 @@ from matplotlib.patches import Rectangle
 from matplotlib.collections import PatchCollection
 from matplotlib import cm
 from multiprocessing import Pool
-top_dir = "./data/"
+top_dir = "/nobackup/rmvn14/thesis/biaxial/data/"
+#top_dir = "./data/"
 output_regex = re.compile("output-*")
 output_list = list(filter(output_regex.match,os.listdir(top_dir)))
 output_list.sort()

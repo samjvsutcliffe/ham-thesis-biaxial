@@ -12,15 +12,16 @@ module load aocc/5.0.0
 module load aocl/5.0.0
 sbcl --dynamic-space-size 16000 --load "build.lisp" --quit
 
-for r in 1 2 3 4
+for m in MC DP RANKINE SE
 do
-    export REFINE=$r
-    export MODEL=MC
-    export ANGLE=30
-    export TENSION=FALSE
-    sbatch batch_bi.sh
-    export TENSION=TRUE
-    sbatch batch_bi.sh
+    for r in 1 4
+    do
+        export REFINE=$r
+        export MODEL=$m
+        export ANGLE=30
+        export TENSION=FALSE
+        sbatch batch_bi.sh
+    done
 done
 #for a in 15 30 45 60
 #do

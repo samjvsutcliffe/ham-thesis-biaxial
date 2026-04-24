@@ -72,7 +72,8 @@ width = 3.487
 height = width / 1.618
 
 
-chalk_dir ="./data/"
+#chalk_dir ="./data/"
+chalk_dir = "/nobackup/rmvn14/thesis/biaxial/data/"
 output_regex = re.compile("output*")                                 
 output_list = list(filter(output_regex.match,os.listdir(chalk_dir)))
 output_list.sort()
@@ -95,7 +96,7 @@ with open(output_dir+"settings.json") as f:
     xlim = [0,json_settings["DOMAIN-SIZE"][0]]
     ylim = [0,json_settings["DOMAIN-SIZE"][1]]
 
-ylim=[0,12]
+#ylim=[0,12]
 plt.close("all")
 
 files = os.listdir(output_dir)
