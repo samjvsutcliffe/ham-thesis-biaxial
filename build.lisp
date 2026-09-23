@@ -15,7 +15,7 @@
    "worker"
     :executable t
     :toplevel #'main
-    :compression nil
+    :compression t
     :save-runtime-options t
     )
 (uiop:quit)

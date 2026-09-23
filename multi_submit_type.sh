@@ -10,11 +10,13 @@ esac
 set -e
 module load aocc/5.0.0
 module load aocl/5.0.0
-sbcl --dynamic-space-size 16000 --load "build.lisp" --quit
+#sbcl --dynamic-space-size 16000 --load "build.lisp" --quit
 
+
+export NAME=TYPE
 for m in MC DP RANKINE SE
 do
-    for r in 1 4
+    for r in 4
     do
         export REFINE=$r
         export MODEL=$m
